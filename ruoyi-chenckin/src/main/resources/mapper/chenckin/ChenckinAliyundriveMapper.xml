@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.chenckin.mapper.ChenckinAliyundriveMapper">
+
+    <resultMap type="ChenckinAliyundrive" id="ChenckinAliyundriveResult">
+        <result property="id" column="id"/>
+        <result property="nickname" column="nickname"/>
+        <result property="token" column="token"/>
+        <result property="lastResult" column="last_result"/>
+        <result property="lastStatus" column="last_status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectChenckinAliyundriveVo">
+        select id, nickname, token, last_result, last_status, create_time, update_time
+        from chenckin_aliyundrive
+    </sql>
+
+    <select id="selectChenckinAliyundriveList" parameterType="ChenckinAliyundrive" resultMap="ChenckinAliyundriveResult">
+        <include refid="selectChenckinAliyundriveVo"/>
+        <where>
+            <if test="nickname != null  and nickname != ''">and nickname like concat('%', #{nickname}, '%')</if>
+            <if test="lastStatus != null ">and last_status = #{lastStatus}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''">and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+            <if test="params.beginUpdateTime != null and params.beginUpdateTime != '' and params.endUpdateTime != null and params.endUpdateTime != ''">and update_time between #{params.beginUpdateTime} and #{params.endUpdateTime}</if>
+        </where>
+    </select>
+
+    <select id="selectChenckinAliyundriveById" parameterType="Long" resultMap="ChenckinAliyundriveResult">
+        <include refid="selectChenckinAliyundriveVo"/>
+        where id = #{id}
+    </select>
+    <select id="list" resultMap="ChenckinAliyundriveResult">
+        <include refid="selectChenckinAliyundriveVo"/>
+    </select>
+
+    <insert id="insertChenckinAliyundrive" parameterType="ChenckinAliyundrive" useGeneratedKeys="true" keyProperty="id">
+        insert into chenckin_aliyundrive
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="nickname != null">nickname,</if>
+            <if test="token != null">token,</if>
+            <if test="lastResult != null">last_result,</if>
+            <if test="lastStatus != null">last_status,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="nickname != null">#{nickname},</if>
+            <if test="token != null">#{token},</if>
+            <if test="lastResult != null">#{lastResult},</if>
+            <if test="lastStatus != null">#{lastStatus},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateChenckinAliyundrive" parameterType="ChenckinAliyundrive">
+        update chenckin_aliyundrive
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="nickname != null">nickname = #{nickname},</if>
+            <if test="token != null">token = #{token},</if>
+            <if test="lastResult != null">last_result = #{lastResult},</if>
+            <if test="lastStatus != null">last_status = #{lastStatus},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteChenckinAliyundriveById" parameterType="Long">
+        delete
+        from chenckin_aliyundrive
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteChenckinAliyundriveByIds" parameterType="String">
+        delete from chenckin_aliyundrive where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
