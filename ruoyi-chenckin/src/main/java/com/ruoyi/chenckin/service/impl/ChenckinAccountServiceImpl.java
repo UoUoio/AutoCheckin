@@ -3,7 +3,7 @@ package com.ruoyi.chenckin.service.impl;
 import com.ruoyi.chenckin.domain.ChenckinAccount;
 import com.ruoyi.chenckin.mapper.ChenckinAccountMapper;
 import com.ruoyi.chenckin.service.IChenckinAccountService;
-import com.ruoyi.chenckin.util.ChenckinUtils;
+import com.ruoyi.chenckin.util.ChenckinCommon;
 import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.constant.HttpStatus;
 import com.ruoyi.common.exception.ServiceException;
@@ -100,7 +100,7 @@ public class ChenckinAccountServiceImpl implements IChenckinAccountService {
     @Override
     public int chenckinAll() {
         List<ChenckinAccount> list = chenckinAccountMapper.list();
-        ChenckinUtils.chenckinAll(list);
+        ChenckinCommon.chenckinAll(list);
         return chenckinAccountMapper.updateList(list);
     }
 
@@ -116,7 +116,7 @@ public class ChenckinAccountServiceImpl implements IChenckinAccountService {
         if (!accountUserId.equals(SecurityUtils.getUserId())) {
             throw new ServiceException("有校验你执行的任务的,别乱点", HttpStatus.UNAUTHORIZED);
         }
-        ChenckinUtils.chenckin(chenckinAccount);
+        ChenckinCommon.chenckin(chenckinAccount);
         return chenckinAccountMapper.updateChenckinAccount(chenckinAccount);
     }
 }

@@ -4,24 +4,32 @@ import cn.hutool.http.HttpRequest;
 
 /**
  * @author:
- * @Date: 2023-02-08 13:13
- * @Description: < 描述 >
+ * @Date","2023-02-08 13:13
+ * @Description","< 描述 >
  */
 public class MyBMW {
 
     public static void main(String[] args) {
-        // https://stm-collect.cn.miaozhen.com/track_ajax HTTP/1.1
-        HttpRequest post = HttpRequest.post("https://stm-collect.cn.miaozhen.com/track_ajax?tid=dc-3809&t=event&cid=165302626554784860&lt=3&ni=0&sr=1284*2778&ul=zh-Hans-US&mdm=iPhone14%2C3&brand=apple&appv=3.1.0&mo=ios&m");
-        post
-                .header("Host", "stm-collect.cn.miaozhen.com")
+
+        HttpRequest post = HttpRequest.post("https://miniapp-api.csdn.net/points/api/task/activity/signin/addSignin");
+
+
+        post.header("Host", "miniapp-api.csdn.net")
+                .header("loginUserName", "weixin_42059737")
+                .header("X-Access-Token", "48ac213600202abc8487a9d6ff6e4ea7")
+                .header("deviceId", "16693719044407671310")
+                .header("X-Ca-Nonce", "5595957e-726e-4512-8f1e-b7b2f11e33ec")
+                .header("device_id", "16693719044407671310")
+                .header("X-Ca-Key", "203816229")
+                .header("X-Ca-Signature-Headers", "x-ca-key,x-ca-nonce")
+                .header("X-Device-ID", "16693719044407671310")
+                .header("X-Ca-Signed-Content-Type", "application/json;charset=UTF-8")
                 .header("Accept", "*/*")
-                .header("Content-Type", "image/gif;charset=utf-8")
-                .header("Connection", "keep-alive")
-                .header("Cookie", "a=bCf5p0Ri43iH; stmat=1671075993.3809; tsc=3_639a9899_639a9899_0_1")
-                .header("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 16_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148")
-                .header("Accept-Language", "zh-CN,zh-Hans;q=0.9")
-                .header("Accept-Encoding", "gzip, deflate, br")
-                .header("Content-Length", "367");
+                .header("X-Ca-Signature", "Odq77/oaC3NzgwLLrRbmez8H4IN/r/fC3QhTpqpefpM=")
+                .header("Cookie", "UserName=weixin_42059737; UserToken=cc5695046bbb4105a7bc5305ecd7b6e1")
+
+                .body("{\"activityId\":1005,\"pageNum\":2,\"pageSize\":4,\"queryType\":\"noCash\"}");
+
         String body = post.execute().body();
         System.out.println(body);
     }

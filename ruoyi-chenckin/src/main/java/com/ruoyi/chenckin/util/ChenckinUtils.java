@@ -11,7 +11,7 @@ import java.util.List;
  * @Date: 2023-02-08 21:32
  * @Description: < 描述 >
  */
-public class ChenckinUtils {
+class ChenckinUtils {
 
 
     /**
@@ -35,42 +35,31 @@ public class ChenckinUtils {
         return HttpRequest.post("https://stm-collect.cn.miaozhen.com/track_ajax?" + token).execute().body();
     }
 
-
     /**
-     * 批量签到任务执行
-     *
-     * @param list
+     * 万词王
      */
-    public static void chenckinAll(List<ChenckinAccount> list) {
-        list.forEach(account -> {
-            chenckin(account);
-        });
+    public static String checkInWanCiWang(String token) {
+        HttpRequest post = HttpRequest.post("https://recite.perfectlingo.com/api/recite/user-stat/v1/report-daily-registration?clientTime=" + System.currentTimeMillis());
+        post.header("X-Eng-Auth", token);
+        String body = post.execute().body();
+        return body;
     }
 
+
     /**
-     * 单个签到任务执行
-     *
-     * @param account
+     * CSDN
      */
-    public static void chenckin(ChenckinAccount account) {
-        // 阿里云签到
-        if (account.getTypes() == 1) {
-            String resultStr = checkInAliYunDriver(account.getToken());
-            JSONObject result = JSONObject.parseObject(resultStr);
-            Boolean success = result.getBoolean("success");
-            account.setLastStatus(success == null ? 2 : success ? 1 : 2);
-            account.setLastResult(result.toJSONString());
-            return;
+    public static String checkInCSDN(String token) {
+        HttpRequest post = HttpRequest.post("https://miniapp-api.csdn.net/points/api/task/activity/signin/addSignin");
+        String[] split = token.split("\n");
+        for (String s : split) {
+            String[] split1 = s.split(":");
+            if (split1.length >= 2) {
+                post.header(split1[0], split1[1]);
+            }
         }
-
-        // BMW 签到
-        if (account.getTypes() == 2) {
-            String resultStr = checkInMyBMW(account.getToken());
-            account.setLastStatus(resultStr.contains("GIF") ? 1 : 2);
-            account.setLastResult(resultStr);
-            return;
-        }
-
+        post.body("{\"activityId\":1005,\"pageNum\":2,\"pageSize\":4,\"queryType\":\"noCash\"}");
+        return post.execute().body();
     }
 
 
