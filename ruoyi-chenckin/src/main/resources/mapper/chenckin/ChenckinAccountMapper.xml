@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.chenckin.mapper.ChenckinAccountMapper">
+
+    <resultMap type="ChenckinAccount" id="ChenckinAccountResult">
+        <result property="id" column="id"/>
+        <result property="nickname" column="nickname"/>
+        <result property="token" column="token"/>
+        <result property="lastResult" column="last_result"/>
+        <result property="lastStatus" column="last_status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="userId" column="user_id"/>
+        <result property="types" column="types"/>
+    </resultMap>
+
+    <sql id="selectChenckinAccountVo">
+        select id,
+               nickname,
+               token,
+               last_result,
+               last_status,
+               create_time,
+               update_time,
+               user_id,
+               types
+        from chenckin_account
+    </sql>
+
+    <select id="selectChenckinAccountList" parameterType="ChenckinAccount" resultMap="ChenckinAccountResult">
+        select
+        ca.id,
+        ca.nickname,
+        ca.token,
+        ca.last_result,
+        ca.last_status,
+        ca.create_time,
+        ca.update_time,
+        ca.user_id,
+        ca.types
+        from chenckin_account AS ca
+        <where>
+            <if test="nickname != null  and nickname != ''">and ca.nickname like concat('%', #{nickname}, '%')</if>
+            <if test="lastResult != null  and lastResult != ''">and ca.last_result like concat('%', #{lastResult}, '%')</if>
+            <if test="lastStatus != null ">and ca.last_status = #{lastStatus}</if>
+            <if test="types != null ">and ca.types = #{types}</if>
+        </where>
+    </select>
+
+    <select id="selectChenckinAccountById" parameterType="Long" resultMap="ChenckinAccountResult">
+        <include refid="selectChenckinAccountVo"/>
+        where id = #{id}
+    </select>
+    <select id="list" resultMap="ChenckinAccountResult">
+        <include refid="selectChenckinAccountVo"/>
+    </select>
+
+    <insert id="insertChenckinAccount" parameterType="ChenckinAccount" useGeneratedKeys="true" keyProperty="id">
+        insert into chenckin_account
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="nickname != null">nickname,</if>
+            <if test="token != null">token,</if>
+            <if test="lastResult != null">last_result,</if>
+            <if test="lastStatus != null">last_status,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="types != null">types,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="nickname != null">#{nickname},</if>
+            <if test="token != null">#{token},</if>
+            <if test="lastResult != null">#{lastResult},</if>
+            <if test="lastStatus != null">#{lastStatus},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="types != null">#{types},</if>
+        </trim>
+    </insert>
+
+    <update id="updateChenckinAccount" parameterType="ChenckinAccount">
+        update chenckin_account
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="nickname != null">nickname = #{nickname},</if>
+            <if test="token != null">token = #{token},</if>
+            <if test="lastResult != null">last_result = #{lastResult},</if>
+            <if test="lastStatus != null">last_status = #{lastStatus},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="types != null">types = #{types},</if>
+        </trim>
+        where id = #{id}
+    </update>
+    <update id="updateList">
+        <foreach separator=";" index="index" item="item" collection="list" close="" open="">
+            update chenckin_account
+            set last_status=#{item.lastStatus}, last_result=#{item.lastResult}
+            where id = ${item.id}
+        </foreach>
+    </update>
+
+
+    <delete id="deleteChenckinAccountById" parameterType="Long">
+        delete
+        from chenckin_account
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteChenckinAccountByIds" parameterType="String">
+        delete from chenckin_account where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

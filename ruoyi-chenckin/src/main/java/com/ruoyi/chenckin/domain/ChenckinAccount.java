@@ -6,16 +6,16 @@ import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
- * 阿里云盘对象 chenckin_aliyundrive
+ * 签到列表对象 chenckin_account
  * 
  * @author ruoyi
- * @date 2023-02-08
+ * @date 2023-02-09
  */
-public class ChenckinAliyundrive extends BaseEntity
+public class ChenckinAccount extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
-    /**  */
+    /** 编号 */
     private Long id;
 
     /** 昵称 */
@@ -23,15 +23,23 @@ public class ChenckinAliyundrive extends BaseEntity
     private String nickname;
 
     /** Token */
+    @Excel(name = "Token")
     private String token;
 
-    /** 最后一次运行结果 */
-    @Excel(name = "最后一次运行结果")
+    /** 运行结果 */
+    @Excel(name = "运行结果")
     private String lastResult;
 
-    /** 最后一次运行状态 */
-    @Excel(name = "最后一次运行状态")
-    private Long lastStatus;
+    /** 运行状态 */
+    @Excel(name = "运行状态")
+    private Integer lastStatus;
+
+    /** 创建人 */
+    private Long userId;
+
+    /** 类型 */
+    @Excel(name = "类型")
+    private Long types;
 
     public void setId(Long id) 
     {
@@ -69,14 +77,32 @@ public class ChenckinAliyundrive extends BaseEntity
     {
         return lastResult;
     }
-    public void setLastStatus(Long lastStatus) 
+    public void setLastStatus(Integer lastStatus) 
     {
         this.lastStatus = lastStatus;
     }
 
-    public Long getLastStatus() 
+    public Integer getLastStatus() 
     {
         return lastStatus;
+    }
+    public void setUserId(Long userId) 
+    {
+        this.userId = userId;
+    }
+
+    public Long getUserId() 
+    {
+        return userId;
+    }
+    public void setTypes(Long types) 
+    {
+        this.types = types;
+    }
+
+    public Long getTypes() 
+    {
+        return types;
     }
 
     @Override
@@ -89,6 +115,8 @@ public class ChenckinAliyundrive extends BaseEntity
             .append("lastStatus", getLastStatus())
             .append("createTime", getCreateTime())
             .append("updateTime", getUpdateTime())
+            .append("userId", getUserId())
+            .append("types", getTypes())
             .toString();
     }
 }

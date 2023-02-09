@@ -9,35 +9,25 @@
             @keyup.enter="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="最后一次运行状态" prop="lastStatus">
-        <el-select v-model="queryParams.lastStatus" placeholder="请选择最后一次运行状态" clearable>
+      <el-form-item label="运行状态" prop="lastStatus">
+        <el-select v-model="queryParams.lastStatus" placeholder="请选择运行状态" clearable>
           <el-option
-              v-for="dict in result_status"
+              v-for="dict in chenckin_account_last_status"
               :key="dict.value"
               :label="dict.label"
               :value="dict.value"
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="创建时间" style="width: 308px">
-        <el-date-picker
-            v-model="daterangeCreateTime"
-            value-format="YYYY-MM-DD"
-            type="daterange"
-            range-separator="-"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-        ></el-date-picker>
-      </el-form-item>
-      <el-form-item label="更新时间" style="width: 308px">
-        <el-date-picker
-            v-model="daterangeUpdateTime"
-            value-format="YYYY-MM-DD"
-            type="daterange"
-            range-separator="-"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-        ></el-date-picker>
+      <el-form-item label="类型" prop="types">
+        <el-select v-model="queryParams.types" placeholder="请选择类型" clearable>
+          <el-option
+              v-for="dict in chenckin_account_types"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
@@ -52,7 +42,7 @@
             plain
             icon="Plus"
             @click="handleAdd"
-            v-hasPermi="['chenckin:aliyundrive:add']"
+            v-hasPermi="['chenckin:account:add']"
         >新增
         </el-button>
       </el-col>
@@ -63,7 +53,7 @@
             icon="Edit"
             :disabled="single"
             @click="handleUpdate"
-            v-hasPermi="['chenckin:aliyundrive:edit']"
+            v-hasPermi="['chenckin:account:edit']"
         >修改
         </el-button>
       </el-col>
@@ -74,7 +64,7 @@
             icon="Delete"
             :disabled="multiple"
             @click="handleDelete"
-            v-hasPermi="['chenckin:aliyundrive:remove']"
+            v-hasPermi="['chenckin:account:remove']"
         >删除
         </el-button>
       </el-col>
@@ -84,27 +74,39 @@
             plain
             icon="Download"
             @click="handleExport"
-            v-hasPermi="['chenckin:aliyundrive:export']"
+            v-hasPermi="['chenckin:account:export']"
         >导出
         </el-button>
       </el-col>
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="aliyundriveList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="accountList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
-      <el-table-column label="" align="center" prop="id"/>
+      <el-table-column label="编号" align="center" prop="id"/>
       <el-table-column label="昵称" align="center" prop="nickname"/>
-      <el-table-column label="最后一次运行结果" align="center" prop="lastResult"/>
-      <el-table-column label="最后一次运行状态" align="center" prop="lastStatus">
+      <el-table-column label="Token" align="center" prop="token" :show-overflow-tooltip="true"/>
+      <el-table-column label="运行结果" align="center" prop="lastResult" :show-overflow-tooltip="true"/>
+      <el-table-column label="运行状态" align="center" prop="lastStatus">
         <template #default="scope">
-          <dict-tag :options="result_status" :value="scope.row.lastStatus"/>
+          <dict-tag :options="chenckin_account_last_status" :value="scope.row.lastStatus"/>
+        </template>
+      </el-table-column>
+      <el-table-column label="更新时间" align="center" prop="updateTime" width="180">
+        <template #default="scope">
+          <span>{{ parseTime(scope.row.updateTime) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="类型" align="center" prop="types">
+        <template #default="scope">
+          <dict-tag :options="chenckin_account_types" :value="scope.row.types"/>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
-          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['chenckin:aliyundrive:edit']">修改</el-button>
-          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['chenckin:aliyundrive:remove']">删除</el-button>
+          <el-tooltip content="执行一次" placement="top">
+            <el-button link type="primary" icon="CaretRight" @click="handleRun(scope.row)"></el-button>
+          </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
@@ -117,27 +119,37 @@
         @pagination="getList"
     />
 
-    <!-- 添加或修改阿里云盘对话框 -->
+    <!-- 添加或修改签到列表对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
-      <el-form ref="aliyundriveRef" :model="form" :rules="rules" label-width="80px">
+      <el-form ref="accountRef" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="昵称" prop="nickname">
           <el-input v-model="form.nickname" placeholder="请输入昵称"/>
         </el-form-item>
         <el-form-item label="Token" prop="token">
           <el-input v-model="form.token" type="textarea" placeholder="请输入内容"/>
         </el-form-item>
-        <el-form-item label="最后一次运行结果" prop="lastResult">
+        <el-form-item label="运行结果" prop="lastResult">
           <el-input v-model="form.lastResult" type="textarea" placeholder="请输入内容"/>
         </el-form-item>
-        <el-form-item label="最后一次运行状态" prop="lastStatus">
-          <el-select v-model="form.lastStatus" placeholder="请选择最后一次运行状态">
-            <el-option
-                v-for="dict in result_status"
+        <el-form-item label="运行状态" prop="lastStatus">
+          <el-radio-group v-model="form.lastStatus">
+            <el-radio
+                v-for="dict in chenckin_account_last_status"
                 :key="dict.value"
-                :label="dict.label"
-                :value="parseInt(dict.value)"
-            ></el-option>
-          </el-select>
+                :label="parseInt(dict.value)"
+            >{{ dict.label }}
+            </el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="类型" prop="types">
+          <el-radio-group v-model="form.types">
+            <el-radio
+                v-for="dict in chenckin_account_types"
+                :key="dict.value"
+                :label="parseInt(dict.value)"
+            >{{ dict.label }}
+            </el-radio>
+          </el-radio-group>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -150,13 +162,13 @@
   </div>
 </template>
 
-<script setup name="Aliyundrive">
-import {listAliyundrive, getAliyundrive, delAliyundrive, addAliyundrive, updateAliyundrive} from "@/api/chenckin/aliyundrive";
+<script setup name="Account">
+import {listAccount, getAccount, delAccount, addAccount, updateAccount, handleRunAccount} from "@/api/chenckin/account";
 
 const {proxy} = getCurrentInstance();
-const {result_status} = proxy.useDict('result_status');
+const {chenckin_account_last_status, chenckin_account_types} = proxy.useDict('chenckin_account_last_status', 'chenckin_account_types');
 
-const aliyundriveList = ref([]);
+const accountList = ref([]);
 const open = ref(false);
 const loading = ref(true);
 const showSearch = ref(true);
@@ -165,8 +177,6 @@ const single = ref(true);
 const multiple = ref(true);
 const total = ref(0);
 const title = ref("");
-const daterangeCreateTime = ref([]);
-const daterangeUpdateTime = ref([]);
 
 const data = reactive({
   form: {},
@@ -174,9 +184,9 @@ const data = reactive({
     pageNum: 1,
     pageSize: 10,
     nickname: null,
+    lastResult: null,
     lastStatus: null,
-    createTime: null,
-    updateTime: null
+    types: null
   },
   rules: {
     createTime: [
@@ -184,26 +194,20 @@ const data = reactive({
     ],
     updateTime: [
       {required: true, message: "更新时间不能为空", trigger: "blur"}
-    ]
+    ],
+    userId: [
+      {required: true, message: "创建人不能为空", trigger: "blur"}
+    ],
   }
 });
 
 const {queryParams, form, rules} = toRefs(data);
 
-/** 查询阿里云盘列表 */
+/** 查询签到列表列表 */
 function getList() {
   loading.value = true;
-  queryParams.value.params = {};
-  if (null != daterangeCreateTime && '' != daterangeCreateTime) {
-    queryParams.value.params["beginCreateTime"] = daterangeCreateTime.value[0];
-    queryParams.value.params["endCreateTime"] = daterangeCreateTime.value[1];
-  }
-  if (null != daterangeUpdateTime && '' != daterangeUpdateTime) {
-    queryParams.value.params["beginUpdateTime"] = daterangeUpdateTime.value[0];
-    queryParams.value.params["endUpdateTime"] = daterangeUpdateTime.value[1];
-  }
-  listAliyundrive(queryParams.value).then(response => {
-    aliyundriveList.value = response.rows;
+  listAccount(queryParams.value).then(response => {
+    accountList.value = response.rows;
     total.value = response.total;
     loading.value = false;
   });
@@ -224,9 +228,11 @@ function reset() {
     lastResult: null,
     lastStatus: null,
     createTime: null,
-    updateTime: null
+    updateTime: null,
+    userId: null,
+    types: null
   };
-  proxy.resetForm("aliyundriveRef");
+  proxy.resetForm("accountRef");
 }
 
 /** 搜索按钮操作 */
@@ -237,8 +243,6 @@ function handleQuery() {
 
 /** 重置按钮操作 */
 function resetQuery() {
-  daterangeCreateTime.value = [];
-  daterangeUpdateTime.value = [];
   proxy.resetForm("queryRef");
   handleQuery();
 }
@@ -254,32 +258,32 @@ function handleSelectionChange(selection) {
 function handleAdd() {
   reset();
   open.value = true;
-  title.value = "添加阿里云盘";
+  title.value = "添加签到列表";
 }
 
 /** 修改按钮操作 */
 function handleUpdate(row) {
   reset();
   const _id = row.id || ids.value
-  getAliyundrive(_id).then(response => {
+  getAccount(_id).then(response => {
     form.value = response.data;
     open.value = true;
-    title.value = "修改阿里云盘";
+    title.value = "修改签到列表";
   });
 }
 
 /** 提交按钮 */
 function submitForm() {
-  proxy.$refs["aliyundriveRef"].validate(valid => {
+  proxy.$refs["accountRef"].validate(valid => {
     if (valid) {
       if (form.value.id != null) {
-        updateAliyundrive(form.value).then(response => {
+        updateAccount(form.value).then(response => {
           proxy.$modal.msgSuccess("修改成功");
           open.value = false;
           getList();
         });
       } else {
-        addAliyundrive(form.value).then(response => {
+        addAccount(form.value).then(response => {
           proxy.$modal.msgSuccess("新增成功");
           open.value = false;
           getList();
@@ -289,11 +293,27 @@ function submitForm() {
   });
 }
 
+/**
+ * 执行一次
+ * @param row
+ */
+function handleRun(row) {
+  const _ids = row.id || ids.value;
+  proxy.$modal.confirm('是否确认执行编号为"' + _ids + '"的数据项？').then(function () {
+    return handleRunAccount(_ids);
+  }).then(() => {
+    getList();
+    proxy.$modal.msgSuccess("执行完毕");
+  }).catch(() => {
+  });
+}
+
+
 /** 删除按钮操作 */
 function handleDelete(row) {
   const _ids = row.id || ids.value;
-  proxy.$modal.confirm('是否确认删除阿里云盘编号为"' + _ids + '"的数据项？').then(function () {
-    return delAliyundrive(_ids);
+  proxy.$modal.confirm('是否确认删除签到列表编号为"' + _ids + '"的数据项？').then(function () {
+    return delAccount(_ids);
   }).then(() => {
     getList();
     proxy.$modal.msgSuccess("删除成功");
@@ -303,9 +323,9 @@ function handleDelete(row) {
 
 /** 导出按钮操作 */
 function handleExport() {
-  proxy.download('chenckin/aliyundrive/export', {
+  proxy.download('chenckin/account/export', {
     ...queryParams.value
-  }, `aliyundrive_${new Date().getTime()}.xlsx`)
+  }, `account_${new Date().getTime()}.xlsx`)
 }
 
 getList();

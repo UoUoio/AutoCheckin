@@ -1,6 +1,6 @@
 package com.ruoyi.quartz.task;
 
-import com.ruoyi.chenckin.service.IChenckinAliyundriveService;
+import com.ruoyi.chenckin.service.IChenckinAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -9,17 +9,17 @@ import org.springframework.stereotype.Component;
  * @Date: 2023-02-08 21:38
  * @Description: < 描述 >
  */
-@Component("aliYunDriverTask")
-public class AliYunDriverTask {
+@Component("chenckinTask")
+public class chenckinTask {
 
     @Autowired
-    private IChenckinAliyundriveService chenckinAliyundriveService;
+    private IChenckinAccountService chenckinAccountService;
 
     /**
      * 签到
      */
     public void checkIn() {
-        chenckinAliyundriveService.checkIn();
+        chenckinAccountService.chenckinAll();
     }
 
 }
