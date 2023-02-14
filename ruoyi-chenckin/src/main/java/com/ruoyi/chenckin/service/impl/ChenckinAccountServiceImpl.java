@@ -49,6 +49,16 @@ public class ChenckinAccountServiceImpl implements IChenckinAccountService {
     }
 
     /**
+     * 查询签到列表列表
+     *
+     * @return 签到列表集合
+     */
+    @Override
+    public List<ChenckinAccount> list() {
+        return chenckinAccountMapper.list();
+    }
+
+    /**
      * 新增签到列表
      *
      * @param chenckinAccount 签到列表

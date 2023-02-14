@@ -26,7 +26,12 @@ public interface IChenckinAccountService {
      * @return 签到列表集合
      */
     public List<ChenckinAccount> selectChenckinAccountList(ChenckinAccount chenckinAccount);
-
+    /**
+     * 查询签到列表列表
+     *
+     * @return 签到列表集合
+     */
+    public List<ChenckinAccount> list();
     /**
      * 新增签到列表
      *

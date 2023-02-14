@@ -1,10 +1,6 @@
 package com.ruoyi.chenckin.util;
 
 import cn.hutool.http.HttpRequest;
-import com.alibaba.fastjson2.JSONObject;
-import com.ruoyi.chenckin.domain.ChenckinAccount;
-
-import java.util.List;
 
 /**
  * @author:

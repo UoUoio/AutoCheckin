@@ -51,7 +51,7 @@ public class ChenckinCommon {
             String resultStr = ChenckinUtils.checkInWanCiWang(account.getToken());
             JSONObject result = JSONObject.parseObject(resultStr);
             Integer code = result.getInteger("code");
-            account.setLastStatus(code == 200 ? 1 : 2);
+            account.setLastStatus(code == 0 ? 1 : 2);
             account.setLastResult(resultStr);
             return;
         }
