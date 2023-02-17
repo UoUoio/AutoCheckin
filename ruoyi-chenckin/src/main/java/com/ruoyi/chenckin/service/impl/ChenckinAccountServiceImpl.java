@@ -126,7 +126,7 @@ public class ChenckinAccountServiceImpl implements IChenckinAccountService {
         if (!accountUserId.equals(SecurityUtils.getUserId())) {
             throw new ServiceException("有校验你执行的任务的,别乱点", HttpStatus.UNAUTHORIZED);
         }
-        ChenckinCommon.chenckin(chenckinAccount);
+        chenckinAccount = ChenckinCommon.chenckin(chenckinAccount);
         return chenckinAccountMapper.updateChenckinAccount(chenckinAccount);
     }
 }

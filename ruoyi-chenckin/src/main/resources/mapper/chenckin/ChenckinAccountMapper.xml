@@ -89,16 +89,16 @@
             <if test="lastResult != null">last_result = #{lastResult},</if>
             <if test="lastStatus != null">last_status = #{lastStatus},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
-            <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="userId != null">user_id = #{userId},</if>
             <if test="types != null">types = #{types},</if>
+            update_time = sysdate()
         </trim>
         where id = #{id}
     </update>
     <update id="updateList">
         <foreach separator=";" index="index" item="item" collection="list" close="" open="">
             update chenckin_account
-            set last_status=#{item.lastStatus}, last_result=#{item.lastResult}
+            set last_status=#{item.lastStatus}, last_result=#{item.lastResult}, update_time = sysdate()
             where id = ${item.id}
         </foreach>
     </update>

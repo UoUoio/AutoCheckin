@@ -30,13 +30,7 @@ public class ChenckinTask {
      * Token保活
      */
     public void stay() {
-        List<ChenckinAccount> accountList = chenckinAccountService.list();
-        for (ChenckinAccount chenckinAccount : accountList) {
-            // 阿里云
-            if (chenckinAccount.getTypes() == 1) {
-                ChenckinCommon.chenckin(chenckinAccount);
-            }
-        }
+        ChenckinCommon.stayAliYun();
     }
 
 
