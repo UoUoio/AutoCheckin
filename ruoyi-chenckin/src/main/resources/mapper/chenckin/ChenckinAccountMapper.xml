@@ -26,7 +26,7 @@
                update_time,
                user_id,
                types
-        from chenckin_account
+        from t_chenckin_account
     </sql>
 
     <select id="selectChenckinAccountList" parameterType="ChenckinAccount" resultMap="ChenckinAccountResult">
@@ -40,7 +40,7 @@
         ca.update_time,
         ca.user_id,
         ca.types
-        from chenckin_account AS ca
+        from t_chenckin_account AS ca
         <where>
             <if test="nickname != null  and nickname != ''">and ca.nickname like concat('%', #{nickname}, '%')</if>
             <if test="lastResult != null  and lastResult != ''">and ca.last_result like concat('%', #{lastResult}, '%')</if>
@@ -58,7 +58,7 @@
     </select>
 
     <insert id="insertChenckinAccount" parameterType="ChenckinAccount" useGeneratedKeys="true" keyProperty="id">
-        insert into chenckin_account
+        insert into t_chenckin_account
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="nickname != null">nickname,</if>
             <if test="token != null">token,</if>
@@ -82,7 +82,7 @@
     </insert>
 
     <update id="updateChenckinAccount" parameterType="ChenckinAccount">
-        update chenckin_account
+        update t_chenckin_account
         <trim prefix="SET" suffixOverrides=",">
             <if test="nickname != null">nickname = #{nickname},</if>
             <if test="token != null">token = #{token},</if>
@@ -97,7 +97,7 @@
     </update>
     <update id="updateList">
         <foreach separator=";" index="index" item="item" collection="list" close="" open="">
-            update chenckin_account
+            update t_chenckin_account
             set last_status=#{item.lastStatus}, last_result=#{item.lastResult}, update_time = sysdate()
             where id = ${item.id}
         </foreach>
@@ -106,12 +106,12 @@
 
     <delete id="deleteChenckinAccountById" parameterType="Long">
         delete
-        from chenckin_account
+        from t_chenckin_account
         where id = #{id}
     </delete>
 
     <delete id="deleteChenckinAccountByIds" parameterType="String">
-        delete from chenckin_account where id in
+        delete from t_chenckin_account where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>

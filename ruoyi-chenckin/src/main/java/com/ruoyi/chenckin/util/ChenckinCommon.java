@@ -33,24 +33,6 @@ public class ChenckinCommon {
 
 
 
-    /**
-     * 单个签到任务执行
-     */
-    public static String stayAliYun() {
-
-        // 9e15fb2e31ee45dcb6cc159050e3b73b
-
-        HttpRequest post = HttpRequest.post("https://auth.aliyundrive.com/v2/account/token");
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("grant_type", "refresh_token");
-        jsonObject.put("app_id", "pJZInNHN2dZWk8qg");
-        jsonObject.put("refresh_token", "9e15fb2e31ee45dcb6cc159050e3b73b");
-
-
-        post.body(jsonObject.toJSONString());
-        String body = post.execute().body();
-        return body;
-    }
 
     public static ChenckinAccount chenckin(ChenckinAccount account) {
         // 阿里云签到

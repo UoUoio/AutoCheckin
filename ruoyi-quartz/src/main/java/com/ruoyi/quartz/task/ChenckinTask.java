@@ -1,12 +1,9 @@
 package com.ruoyi.quartz.task;
 
-import com.ruoyi.chenckin.domain.ChenckinAccount;
 import com.ruoyi.chenckin.service.IChenckinAccountService;
 import com.ruoyi.chenckin.util.ChenckinCommon;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 /**
  * @author:
@@ -25,13 +22,4 @@ public class ChenckinTask {
     public void checkIn() {
         chenckinAccountService.chenckinAll();
     }
-
-    /**
-     * Token保活
-     */
-    public void stay() {
-        ChenckinCommon.stayAliYun();
-    }
-
-
 }

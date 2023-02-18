@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.chenckin.mapper.TGMsgLogMapper">
+    
+    <resultMap type="TGMsgLog" id="TGMsgLogResult">
+        <result property="id"    column="id"    />
+        <result property="statu"    column="statu"    />
+        <result property="chatId"    column="chat_id"    />
+        <result property="content"    column="content"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+        <result property="types"    column="types"    />
+    </resultMap>
+
+    <sql id="selectTGMsgLogVo">
+        select id, statu, chat_id, content, create_time, update_time, remark, types from t_tg_msg_log
+    </sql>
+
+    <select id="selectTGMsgLogList" parameterType="TGMsgLog" resultMap="TGMsgLogResult">
+        <include refid="selectTGMsgLogVo"/>
+        <where>  
+            <if test="statu != null "> and statu = #{statu}</if>
+            <if test="chatId != null "> and chat_id = #{chatId}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="createTime != null "> and create_time = #{createTime}</if>
+            <if test="updateTime != null "> and update_time = #{updateTime}</if>
+            <if test="remark != null  and remark != ''"> and remark = #{remark}</if>
+            <if test="types != null  and types != ''"> and types = #{types}</if>
+        </where>
+    </select>
+    
+    <select id="selectTGMsgLogById" parameterType="Long" resultMap="TGMsgLogResult">
+        <include refid="selectTGMsgLogVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTGMsgLog" parameterType="TGMsgLog" useGeneratedKeys="true" keyProperty="id">
+        insert into t_tg_msg_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="statu != null">statu,</if>
+            <if test="chatId != null">chat_id,</if>
+            <if test="content != null">content,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+            <if test="types != null">types,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="statu != null">#{statu},</if>
+            <if test="chatId != null">#{chatId},</if>
+            <if test="content != null">#{content},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="types != null">#{types},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTGMsgLog" parameterType="TGMsgLog">
+        update t_tg_msg_log
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="statu != null">statu = #{statu},</if>
+            <if test="chatId != null">chat_id = #{chatId},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="types != null">types = #{types},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTGMsgLogById" parameterType="Long">
+        delete from t_tg_msg_log where id = #{id}
+    </delete>
+
+    <delete id="deleteTGMsgLogByIds" parameterType="String">
+        delete from t_tg_msg_log where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
