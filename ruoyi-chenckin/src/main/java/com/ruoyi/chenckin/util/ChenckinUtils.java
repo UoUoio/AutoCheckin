@@ -1,6 +1,7 @@
 package com.ruoyi.chenckin.util;
 
 import cn.hutool.http.HttpRequest;
+import com.alibaba.fastjson2.JSONObject;
 
 /**
  * @author:
@@ -13,15 +14,27 @@ class ChenckinUtils {
     /**
      * 阿里云签到
      */
-    public static String checkInAliYunDriver(String token) {
-        // 使用hutool创建post请求,并设置请求头内容
+    public static String[] checkInAliYunDriver(String token) {
+        String[] returnArray = new String[2];
+        // 刷新Token获取Token
+        HttpRequest refreshPost = HttpRequest.post("https://auth.aliyundrive.com/v2/account/token");
+        JSONObject refreshJson = new JSONObject();
+        refreshJson.put("grant_type", "refresh_token");
+        refreshJson.put("app_id", "pJZInNHN2dZWk8qg");
+        refreshJson.put("refresh_token", token);
+        refreshPost.body(refreshJson.toJSONString());
+        String refreshBody = refreshPost.execute().body();
+        JSONObject refreshResultJson = JSONObject.parseObject(refreshBody);
+        String accessToken = refreshResultJson.getString("access_token");
+        // 下一次获取新Token用的
+        String refreshToken = refreshResultJson.getString("refresh_token");
+        // 签到
         HttpRequest post = HttpRequest.post("https://member.aliyundrive.com/v1/activity/sign_in_list");
-        post.header("Host", "member.aliyundrive.com")
-                .header("Accept", "application/json, text/plain, */*")
-                .header("Authorization", token)
-                .body("{}");
+        post.header("Host", "member.aliyundrive.com").header("Accept", "application/json, text/plain, */*").header("Authorization", accessToken).body("{}");
         String body = post.execute().body();
-        return body;
+        returnArray[0] = refreshToken;
+        returnArray[1] = body;
+        return returnArray;
     }
 
     /**
