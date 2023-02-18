@@ -3,6 +3,8 @@ package com.ruoyi.chenckin.util;
 import cn.hutool.http.HttpRequest;
 import com.alibaba.fastjson2.JSONObject;
 import com.ruoyi.chenckin.domain.ChenckinAccount;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -12,6 +14,7 @@ import java.util.List;
  * @Description: < 描述 >
  */
 public class ChenckinCommon {
+    private static final Logger log = LoggerFactory.getLogger(ChenckinCommon.class);
 
     /**
      * 批量签到任务执行
@@ -20,13 +23,15 @@ public class ChenckinCommon {
      */
     public static void chenckinAll(List<ChenckinAccount> list) {
         list.forEach(account -> {
-            chenckin(account);
+            try {
+                chenckin(account);
+            } catch (Exception e) {
+                log.error(e.toString());
+            }
         });
     }
 
-    public static void main(String[] args) {
-        stayAliYun();
-    }
+
 
     /**
      * 单个签到任务执行
