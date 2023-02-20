@@ -13,9 +13,11 @@ public interface TelegramConfig {
     /** bot Token */
     String Token = "5678867776:AAHrh4YhKSoIZRI3ZSkE7kPcQpd78vELGUI";
 
-    /** 每日新闻 */
-    String Chat_DailyNewsZH = "@BotsMsg";
-    // String Chat_DailyNewsZH = "@DailyNewsZH";
 
+    /** 每日新闻 */
+    String Chat_DailyNewsZH = "@DailyNewsZH";
+
+    // 测试群组
+    // String Chat_DailyNewsZH = "@BotsMsg";
 
 }
