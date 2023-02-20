@@ -55,11 +55,19 @@ public class TelegramBotInit extends TelegramLongPollingBot implements TelegramC
      * @author 圖神 [wobushitushen@gmail.com]
      */
     public enum BotInit {
+        /**
+         * 枚举的方式创建Bot
+         */
         BOT;
-        private TelegramBotInit telegramBot;
+        private final TelegramBotInit telegramBot;
 
-        private BotInit() {
+         BotInit() {
             DefaultBotOptions botOptions = new DefaultBotOptions();
+
+             // botOptions.setProxyHost("127.0.0.1");
+             // botOptions.setProxyPort(7890);
+             // botOptions.setProxyType(DefaultBotOptions.ProxyType.HTTP);
+
             telegramBot = new TelegramBotInit(botOptions);
             try {
                 TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);

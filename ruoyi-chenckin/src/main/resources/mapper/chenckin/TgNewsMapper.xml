@@ -74,6 +74,12 @@
         </trim>
         where id = #{id}
     </update>
+    <update id="updateTgNewsList">
+        <foreach separator=";" index="index" item="item" collection="tgNewsList" close="" open="">
+            update t_tg_news set statu = #{item.statu}, update_time = sysdate()
+            where id = #{item.id}
+        </foreach>
+    </update>
 
     <delete id="deleteTgNewsById" parameterType="Long">
         delete

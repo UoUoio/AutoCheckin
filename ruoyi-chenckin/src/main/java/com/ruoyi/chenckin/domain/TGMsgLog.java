@@ -7,12 +7,11 @@ import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
  * tg消息发送日志对象 t_tg_msg_log
- * 
+ *
  * @author ruoyi
  * @date 2023-02-18
  */
-public class TGMsgLog extends BaseEntity
-{
+public class TGMsgLog extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     /** 编号 */
@@ -25,73 +24,79 @@ public class TGMsgLog extends BaseEntity
 
     /** 消息接收人 */
     @Excel(name = "消息接收人")
-    private Long chatId;
+    private String chatId;
 
     /** 消息内容 */
     @Excel(name = "消息内容")
     private String content;
 
+    /** 返回消息内容 */
+    @Excel(name = "返回消息内容")
+    private String resultContent;
+
     /** 类型-1.每天60秒新闻,2. */
     @Excel(name = "类型-1.每天60秒新闻,2.")
-    private String types;
+    private Integer types;
 
-    public void setId(Long id) 
-    {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Long getId() 
-    {
+    public Long getId() {
         return id;
     }
-    public void setStatu(Integer statu) 
-    {
+
+    public void setStatu(Integer statu) {
         this.statu = statu;
     }
 
-    public Integer getStatu() 
-    {
+    public Integer getStatu() {
         return statu;
     }
-    public void setChatId(Long chatId) 
-    {
+
+    public void setChatId(String chatId) {
         this.chatId = chatId;
     }
 
-    public Long getChatId() 
-    {
+    public String getChatId() {
         return chatId;
     }
-    public void setContent(String content) 
-    {
+
+    public void setContent(String content) {
         this.content = content;
     }
 
-    public String getContent() 
-    {
+    public String getContent() {
         return content;
     }
-    public void setTypes(String types) 
-    {
+
+    public void setTypes(Integer types) {
         this.types = types;
     }
 
-    public String getTypes() 
-    {
+    public Integer getTypes() {
         return types;
+    }
+
+    public String getResultContent() {
+        return resultContent;
+    }
+
+    public void setResultContent(String resultContent) {
+        this.resultContent = resultContent;
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("id", getId())
-            .append("statu", getStatu())
-            .append("chatId", getChatId())
-            .append("content", getContent())
-            .append("createTime", getCreateTime())
-            .append("updateTime", getUpdateTime())
-            .append("remark", getRemark())
-            .append("types", getTypes())
-            .toString();
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+                .append("id", getId())
+                .append("statu", getStatu())
+                .append("chatId", getChatId())
+                .append("content", getContent())
+                .append("createTime", getCreateTime())
+                .append("updateTime", getUpdateTime())
+                .append("remark", getRemark())
+                .append("types", getTypes())
+                .toString();
     }
 }

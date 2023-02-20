@@ -3,6 +3,7 @@ package com.ruoyi.chenckin.service;
 import java.util.List;
 
 import com.ruoyi.chenckin.domain.TgNews;
+import org.apache.ibatis.annotations.Param;
 import org.dom4j.DocumentException;
 
 /**
@@ -68,7 +69,15 @@ public interface ITgNewsService {
 
     /**
      * 根据状态获取每日新闻
+     *
      * @param statu
      */
     List<TgNews> selectTgNewsByStatu(Integer statu);
+
+    /**
+     * 批量修改新闻列表
+     *
+     * @param tgNewsList 新闻列表
+     */
+    int updateTgNewsList(List<TgNews> tgNewsList);
 }

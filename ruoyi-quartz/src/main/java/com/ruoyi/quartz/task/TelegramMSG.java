@@ -25,6 +25,7 @@ public class TelegramMSG {
      * 发送Tg消息
      */
     public void pushMsg() {
+        // 获取所有没发送的新闻 1.没发送
         List<TgNews> tgNewsList = tgNewsService.selectTgNewsByStatu(1);
 
         // 发送新闻

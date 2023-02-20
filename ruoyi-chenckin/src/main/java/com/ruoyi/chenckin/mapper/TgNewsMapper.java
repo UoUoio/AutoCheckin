@@ -3,6 +3,7 @@ package com.ruoyi.chenckin.mapper;
 import java.util.List;
 
 import com.ruoyi.chenckin.domain.TgNews;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * TG每日新闻Mapper接口
@@ -73,4 +74,13 @@ public interface TgNewsMapper {
      * @param statu
      */
     List<TgNews> selectTgNewsByStatu(Integer statu);
+
+
+    /**
+     * 批量更新
+     *
+     * @param tgNewsList
+     * @return
+     */
+    int updateTgNewsList(@Param("tgNewsList") List<TgNews> tgNewsList);
 }

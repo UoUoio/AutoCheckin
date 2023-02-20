@@ -123,4 +123,14 @@ public class TgNewsServiceImpl implements ITgNewsService {
     public List<TgNews> selectTgNewsByStatu(Integer statu) {
         return tgNewsMapper.selectTgNewsByStatu(statu);
     }
+
+    /**
+     * 批量修改新闻列表
+     *
+     * @param tgNewsList 新闻列表
+     */
+    @Override
+    public int updateTgNewsList(List<TgNews> tgNewsList) {
+        return tgNewsMapper.updateTgNewsList(tgNewsList);
+    }
 }
