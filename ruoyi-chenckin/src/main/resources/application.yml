@@ -1,0 +1,15 @@
+rss:
+  # 每天六十秒读懂世界
+  meiTianLiuShiMiao: http://155.248.186.71:1200/zhihu/zhuanlan/c_1261258401923026944
+  # 一觉醒来发生了什么
+  yiJiaoXingLai: http://155.248.186.71:1200/jike/topic/text/553870e8e4b0cafb0a1bef68
+
+telegram:
+  # 每日新闻频道
+  chatDailyNewsZH: @DailyNewsZH
+  # 测试消息频道
+  botsMsg: @BotsMsg
+  # Bot名称
+  botUserName: DailyNewsZHbot
+  # Bot Token
+  botToken: 5678867776:AAHrh4YhKSoIZRI3ZSkE7kPcQpd78vELGUI
