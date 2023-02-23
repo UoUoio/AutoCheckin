@@ -8,8 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
-public class TelegramBotInit extends TelegramLongPollingBot implements TelegramConfig{
-
+public class TelegramBotInit extends TelegramLongPollingBot {
 
 
     public static TelegramBotInit getBot() {
@@ -41,12 +40,12 @@ public class TelegramBotInit extends TelegramLongPollingBot implements TelegramC
 
     @Override
     public String getBotUsername() {
-        return UserName;
+        return TelegramConfig.botUserName;
     }
 
     @Override
     public String getBotToken() {
-        return Token;
+        return TelegramConfig.botToken;
     }
 
     /**
@@ -61,12 +60,12 @@ public class TelegramBotInit extends TelegramLongPollingBot implements TelegramC
         BOT;
         private final TelegramBotInit telegramBot;
 
-         BotInit() {
+        BotInit() {
             DefaultBotOptions botOptions = new DefaultBotOptions();
 
-             // botOptions.setProxyHost("127.0.0.1");
-             // botOptions.setProxyPort(7890);
-             // botOptions.setProxyType(DefaultBotOptions.ProxyType.HTTP);
+            // botOptions.setProxyHost("127.0.0.1");
+            // botOptions.setProxyPort(7890);
+            // botOptions.setProxyType(DefaultBotOptions.ProxyType.HTTP);
 
             telegramBot = new TelegramBotInit(botOptions);
             try {

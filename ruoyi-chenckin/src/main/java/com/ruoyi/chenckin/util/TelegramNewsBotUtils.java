@@ -33,11 +33,10 @@ public class TelegramNewsBotUtils {
     public void pushNews(List<TgNews> tgNewsList) {
         tgNewsList.forEach(tgNews -> {
             // 发送新闻,保存数据库记录
-            Message sendMessageResult = TelegramUtils.sendMessage(TelegramConfig.Chat_DailyNewsZH, tgNews.getContent());
-            System.out.println(sendMessageResult);
+            Message sendMessageResult = TelegramUtils.sendMessage(TelegramConfig.chatDailyNewsZH, tgNews.getContent());
             TGMsgLog msgLog = new TGMsgLog();
             // 消息接收人
-            msgLog.setChatId(TelegramConfig.Chat_DailyNewsZH);
+            msgLog.setChatId(TelegramConfig.chatDailyNewsZH);
             // 消息内容
             msgLog.setContent(tgNews.getContent());
             // 1成功,2失败

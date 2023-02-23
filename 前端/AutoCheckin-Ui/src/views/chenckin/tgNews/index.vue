@@ -78,7 +78,7 @@
     <el-table v-loading="loading" :data="tgNewsList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="编号" align="center" prop="id" />
-      <el-table-column label="新闻内容" align="center" prop="content" />
+      <el-table-column label="新闻内容" align="center" prop="content" :show-overflow-tooltip="true" />
       <el-table-column label="发送状态" align="center" prop="statu">
         <template #default="scope">
           <dict-tag :options="t_tg_news_statu" :value="scope.row.statu"/>
@@ -86,12 +86,12 @@
       </el-table-column>
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template #default="scope">
-          <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
+          <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="更新时间" align="center" prop="updateTime" width="180">
         <template #default="scope">
-          <span>{{ parseTime(scope.row.updateTime, '{y}-{m}-{d}') }}</span>
+          <span>{{ parseTime(scope.row.updateTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">

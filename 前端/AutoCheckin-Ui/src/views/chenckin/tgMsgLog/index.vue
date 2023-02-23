@@ -108,15 +108,16 @@
         </template>
       </el-table-column>
       <el-table-column label="消息接收人" align="center" prop="chatId" />
-      <el-table-column label="消息内容" align="center" prop="content" />
+      <el-table-column label="消息内容" align="center" prop="content" :show-overflow-tooltip="true"/>
+      <el-table-column label="响应消息内容" align="center" prop="content" :show-overflow-tooltip="true"/>
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template #default="scope">
-          <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
+          <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="更新时间" align="center" prop="updateTime" width="180">
         <template #default="scope">
-          <span>{{ parseTime(scope.row.updateTime, '{y}-{m}-{d}') }}</span>
+          <span>{{ parseTime(scope.row.updateTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="备注" align="center" prop="remark" />
@@ -177,7 +178,7 @@
 import { listTgMsgLog, getTgMsgLog, delTgMsgLog, addTgMsgLog, updateTgMsgLog } from "@/api/chenckin/tgMsgLog";
 
 const { proxy } = getCurrentInstance();
-const { t_tg_news_statu } = proxy.useDict('t_tg_news_statu');
+const { t_tg_news_statu } = proxy.useDict('t_tg_msg_log_statu');
 
 const tgMsgLogList = ref([]);
 const open = ref(false);

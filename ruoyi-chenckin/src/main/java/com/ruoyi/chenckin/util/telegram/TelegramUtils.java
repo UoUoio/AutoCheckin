@@ -13,7 +13,7 @@ import java.io.File;
  * @Date: 2022-02-25 17:16
  * @Description: < 描述 >
  */
-public class TelegramUtils implements TelegramConfig {
+public class TelegramUtils {
 
     private static TelegramBotInit telegramBot = TelegramBotInit.getBot();
 
@@ -41,7 +41,7 @@ public class TelegramUtils implements TelegramConfig {
     /**
      * 发送消息
      *
-     * @param chatId 聊天id
+     * @param chatId  聊天id
      * @param caption 消息内容
      * @return
      */
